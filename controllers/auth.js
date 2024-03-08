@@ -22,13 +22,6 @@ const register = async (req, res) => {
       }
       return res.status(400).json({ success: false, message: 'All fields are required' });
     }
-    // let avatar;
-    // if (!req.file) {
-    //   avatar = 'https://res.cloudinary.com/dvlmkceym/image/upload/v1709884630/avatar/x0yqligvo08ungdtm6db.jpg';
-    // }
-    // else {
-    //   avatar = req.file.path;
-    // }
     const result = await authService.register(email, password, username, display_name, bio, req.file);
     res.json(result);
   } catch (error) {

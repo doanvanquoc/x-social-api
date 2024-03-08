@@ -24,6 +24,7 @@ const login = (email, password) => new Promise(async (resolve, reject) => {
 
 const register = (email, password, username, display_name, bio, file) => new Promise(async (resolve, reject) => {
   try {
+    console.log(file.path);
     const check = await db.Account.findOne({ where: { email } })
     if (check) {
       if (file) {
