@@ -9,7 +9,7 @@ const login = async (req, res) => {
     const result = await authService.login(email, password);
     res.json(result);
   } catch (error) {
-    res.json(error);
+    res.status(500).json(error);
   }
 }
 
@@ -22,8 +22,21 @@ const register = async (req, res) => {
     const result = await authService.register(email, password, username, display_name, bio);
     res.json(result);
   } catch (error) {
-    res.json(error);
+    res.status(500).json(error);
   }
 }
 
-export default { login, register }
+const checkBeforeRegister = async (req, res) => {
+  try {
+    const { email } = req.body;
+    if (!email) {
+      return res.status(400).json({ success: false, message: 'Email is required' });
+    }
+    const result = await authService.checkBeforeRegister(email);
+    res.json(result);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+}
+
+export default { login, register, checkBeforeRegister }

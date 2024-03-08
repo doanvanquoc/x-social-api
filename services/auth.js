@@ -46,4 +46,16 @@ const register = (email, password, username, display_name, bio) => new Promise(a
   }
 })
 
-export default { login, register }
+const checkBeforeRegister = (email) => new Promise(async (resolve, reject) => {
+  try {
+    const check = await db.Account.findOne({ where: { email } })
+    if (check) {
+      return resolve({ success: false, message: 'Email already exists' })
+    }
+    resolve({ success: true })
+  } catch (error) {
+    reject({ success: false, message: error.message })
+  }
+})
+
+export default { login, register, checkBeforeRegister }
