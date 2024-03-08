@@ -9,7 +9,7 @@ const login = async (req, res) => {
     const result = await authService.login(email, password);
     res.json(result);
   } catch (error) {
-    res.status(500).json(error);
+    res.json(error);
   }
 }
 
@@ -22,7 +22,7 @@ const register = async (req, res) => {
     const result = await authService.register(email, password, username, display_name, bio);
     res.json(result);
   } catch (error) {
-    res.status(500).json(error);
+    res.json(error);
   }
 }
 
