@@ -17,9 +17,19 @@ const register = async (req, res) => {
   try {
     const { email, password, username, display_name, bio } = req.body;
     if (!email || !password || !username || !display_name || !bio) {
+      if (req.file) {
+        cloudinary.uploader.destroy(req.file.filename);
+      }
       return res.status(400).json({ success: false, message: 'All fields are required' });
     }
-    const result = await authService.register(email, password, username, display_name, bio);
+    // let avatar;
+    // if (!req.file) {
+    //   avatar = 'https://res.cloudinary.com/dvlmkceym/image/upload/v1709884630/avatar/x0yqligvo08ungdtm6db.jpg';
+    // }
+    // else {
+    //   avatar = req.file.path;
+    // }
+    const result = await authService.register(email, password, username, display_name, bio, req.file);
     res.json(result);
   } catch (error) {
     res.status(500).json(error);

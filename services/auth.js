@@ -22,17 +22,30 @@ const login = (email, password) => new Promise(async (resolve, reject) => {
   }
 })
 
-const register = (email, password, username, display_name, bio) => new Promise(async (resolve, reject) => {
+const register = (email, password, username, display_name, bio, file) => new Promise(async (resolve, reject) => {
   try {
     const check = await db.Account.findOne({ where: { email } })
     if (check) {
+      if (file) {
+        cloudinary.uploader.destroy(file.filename)
+      }
       resolve({ success: false, message: 'Email already exists' })
     }
     const checkUsername = await db.User.findOne({ where: { username } })
     if (checkUsername) {
+      if (file) {
+        cloudinary.uploader.destroy(file.filename)
+      }
       return resolve({ success: false, message: 'Username already exists' })
     }
-    const user = await db.User.create({ username, display_name, bio })
+    let avatar;
+    if (!file) {
+      avatar = 'https://res.cloudinary.com/dvlmkceym/image/upload/v1709884630/avatar/x0yqligvo08ungdtm6db.jpg'
+    }
+    else {
+      avatar = file.path
+    }
+    const user = await db.User.create({ username, display_name, bio, avatar })
     await db.Account.create({ email, password, user_id: user.id })
     const payload = await db.Account.findOne({
       where: { email },
@@ -42,6 +55,9 @@ const register = (email, password, username, display_name, bio) => new Promise(a
     const token = jwt.sign({ user: payload }, process.env.JWT_SECRET, { expiresIn: '1h' })
     resolve({ success: true, token })
   } catch (error) {
+    if (file) {
+      cloudinary.uploader.destroy(file.filename)
+    }
     reject({ success: false, message: error.message })
   }
 })
