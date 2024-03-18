@@ -1,3 +1,5 @@
+const cloudinary = require('cloudinary').v2;
+
 const db = require('../models')
 
 const getAllPosts = () => new Promise(async (resolve, reject) => {
@@ -38,7 +40,49 @@ const getPostById = (id) => new Promise(async (resolve, reject) => {
   }
 })
 
+const createPost = (body, files) => new Promise(async (resolve, reject) => {
+  try {
+    const post = await db.Post.create(body)
+    if (files) {
+      for (const file of files) {
+        await db.Image.create({ path: file.path })
+      }
+    }
+    const newPost = await db.Post.findOne({
+      where: { id: post.id },
+      include: [
+        {
+          model: db.User,
+          as: 'user',
+          attributes: ['id', 'username', 'display_name', 'avatar', 'bio'],
+          include: [
+            {
+              model: db.Account,
+              as: 'account',
+              attributes: { exclude: ['password', 'user_id', 'id'] }
+            }
+          ]
+        },
+        {
+          model: db.Image,
+          as: 'images',
+          attributes: ['id', 'path']
+        }
+      ],
+    })
+    resolve({ success: true, data: newPost })
+  } catch (error) {
+    if (files) {
+      for (const file of files) {
+        cloudinary.uploader.destroy(file.filename)
+      }
+    }
+    reject({ success: false, message: error.message })
+  }
+})
+
 export default {
   getAllPosts,
-  getPostById
+  getPostById,
+  createPost
 }

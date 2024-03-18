@@ -1,6 +1,7 @@
 import db from '../models'
 import dotenv from 'dotenv'
 import jwt from 'jsonwebtoken'
+const cloudinary = require('cloudinary').v2;
 dotenv.config()
 
 const login = (email, password) => new Promise(async (resolve, reject) => {

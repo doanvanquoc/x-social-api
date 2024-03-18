@@ -1,3 +1,4 @@
+import cloudinary from '../config/cloudinary';
 import postService from '../services/post';
 
 const getAllPosts = async (req, res) => {
@@ -18,7 +19,17 @@ const getPostById = async (req, res) => {
   }
 }
 
+const createPost = async (req, res) => {
+  try {
+    const post = await postService.createPost(req.body, req.files);
+    res.json(post);
+  } catch (error) {
+    res.json(error);
+  }
+}
+
 export default {
   getAllPosts,
-  getPostById
+  getPostById,
+  createPost
 }
