@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken'
 dotenv.config()
 
 function verifyToken(req, res, next) {
-  const authorizationHeader = req.headers['authorization'];
+  const authorizationHeader = req.headers['Authorization'];
   if (!authorizationHeader) {
     return res.status(401).json({ message: 'Access denied. Authorization header is missing.' });
   }
