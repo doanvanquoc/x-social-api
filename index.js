@@ -11,10 +11,12 @@ app.use(express.urlencoded({ extended: false }))
 import authRouter from './routers/auth.js';
 import userRouter from './routers/user.js';
 import postRouter from './routers/post.js';
+import commentRouter from './routers/comment.js';
 
 app.use('/auth', authRouter);
 app.use('/user', userRouter);
 app.use('/posts', postRouter);
+app.use('/comments', commentRouter);
 
 app.listen(process.env.PORT, () => {
     console.log(`Server is running on port ${process.env.PORT}`)
