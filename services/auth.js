@@ -14,7 +14,17 @@ const login = (email, password) => new Promise(async (resolve, reject) => {
       resolve({ success: false, message: 'Email or password is incorrect' })
     }
     else {
-      const token = jwt.sign({ data: user }, process.env.JWT_SECRET, { expiresIn: '1h' })
+      const payload = await db.User.findOne({
+        where: { id: user.user.id },
+        include: [
+          {
+            model: db.Account,
+            as: 'account',
+            attributes: { exclude: ['password', 'user_id'] }
+          }
+        ],
+      })
+      const token = jwt.sign({ data: payload }, process.env.JWT_SECRET, { expiresIn: '1h' })
       resolve({ success: true, token: token })
     }
   } catch (error) {
@@ -48,10 +58,15 @@ const register = (email, password, username, display_name, bio, file) => new Pro
     }
     const user = await db.User.create({ username, display_name, bio, avatar })
     await db.Account.create({ email, password, user_id: user.id })
-    const payload = await db.Account.findOne({
-      where: { email },
-      include: 'user',
-      attributes: { exclude: ['password', 'user_id'] }
+    const payload = await db.User.findOne({
+      where: { id: user.user.id },
+      include: [
+        {
+          model: db.Account,
+          as: 'account',
+          attributes: { exclude: ['password', 'user_id'] }
+        }
+      ],
     })
     const token = jwt.sign({ data: payload }, process.env.JWT_SECRET, { expiresIn: '1h' })
     resolve({ success: true, token })
