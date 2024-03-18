@@ -13,7 +13,7 @@ import userRouter from './routers/user.js';
 import postRouter from './routers/post.js';
 
 app.use('/auth', authRouter);
-// app.use('/user', userRouter);
+app.use('/user', userRouter);
 app.use('/posts', postRouter);
 
 app.listen(process.env.PORT, () => {

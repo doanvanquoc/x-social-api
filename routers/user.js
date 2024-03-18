@@ -1,8 +1,8 @@
 import express from "express";
 import userController from "../controllers/user.js";
-import { verifyToken } from "../middleware/verify_token.js";
+import verifyToken from "../middleware/verify_token.js";
 const router = express.Router();
 
-// router.get("/:id", userController.getUser);
+router.get("/:id", verifyToken, userController.getUser);
 
-// export default router;
+export default router;
