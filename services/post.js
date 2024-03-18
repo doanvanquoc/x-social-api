@@ -24,6 +24,13 @@ const getAllPosts = () => new Promise(async (resolve, reject) => {
                 {
                   model: db.User,
                   as: 'user',
+                  include: [
+                    {
+                      model: db.Account,
+                      as: 'account',
+                      attributes: { exclude: ['password', 'user_id', 'id'] }
+                    }
+                  ]
                 }
               ]
             }
