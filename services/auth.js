@@ -14,7 +14,7 @@ const login = (email, password) => new Promise(async (resolve, reject) => {
       resolve({ success: false, message: 'Email or password is incorrect' })
     }
     else {
-      const token = jwt.sign({ user: user }, process.env.JWT_SECRET, { expiresIn: '1h' })
+      const token = jwt.sign({ data: user }, process.env.JWT_SECRET, { expiresIn: '1h' })
       resolve({ success: true, token: token })
     }
   } catch (error) {
@@ -53,7 +53,7 @@ const register = (email, password, username, display_name, bio, file) => new Pro
       include: 'user',
       attributes: { exclude: ['password', 'user_id'] }
     })
-    const token = jwt.sign({ user: payload }, process.env.JWT_SECRET, { expiresIn: '1h' })
+    const token = jwt.sign({ data: payload }, process.env.JWT_SECRET, { expiresIn: '1h' })
     resolve({ success: true, token })
   } catch (error) {
     if (file) {

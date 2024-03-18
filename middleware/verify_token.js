@@ -4,7 +4,6 @@ dotenv.config()
 
 function verifyToken(req, res, next) {
   const authorizationHeader = req.headers['authorization'];
-  console.log(req.headers);
   if (!authorizationHeader) {
     return res.status(401).json({ message: 'Access denied. Authorization header is missing.' });
   }
@@ -13,7 +12,8 @@ function verifyToken(req, res, next) {
     return res.status(401).json({ success: false, message: 'Access denied. Token is missing.' });
   }
   try {
-    jwt.verify(token, process.env.JWT_SECRET);
+    const user = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = user;
     next();
   } catch (error) {
     return res.status(401).json({ success: false, message: 'Access denied. Invalid token.' });

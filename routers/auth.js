@@ -8,6 +8,7 @@ router.post('/login', authController.login);
 router.post('/register',cloud.uploadAvatar.single('avatar'), authController.register);
 router.post('/check-before-register', authController.checkBeforeRegister);
 router.get('/verify', verifyToken, (req, res) => {
+  console.log(req.user);
     res.status(200).json({ success: true, message: 'Token is valid' })
 });
 
