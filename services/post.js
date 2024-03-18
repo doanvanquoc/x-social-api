@@ -45,7 +45,7 @@ const createPost = (body, files) => new Promise(async (resolve, reject) => {
     const post = await db.Post.create(body)
     if (files) {
       for (const file of files) {
-        await db.Image.create({ path: file.path })
+        await db.Image.create({ path: file.path, post_id: post.id})
       }
     }
     const newPost = await db.Post.findOne({
