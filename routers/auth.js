@@ -7,6 +7,6 @@ import verifyToken from '../middleware/verify_token.js';
 router.post('/login', authController.login);
 router.post('/register',cloud.uploadAvatar.single('avatar'), authController.register);
 router.post('/check-before-register', authController.checkBeforeRegister);
-router.post('/verify', verifyToken);
+router.get('/verify', verifyToken);
 
 export default router;
