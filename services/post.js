@@ -16,21 +16,21 @@ const getAllPosts = () => new Promise(async (resolve, reject) => {
               as: 'account',
               attributes: { exclude: ['password', 'user_id', 'id'] }
             },
+          ]
+        },
+        {
+          model: db.Comment,
+          as: 'comments',
+          attributes: ['id', 'content', 'createdAt'],
+          include: [
             {
-              model: db.Comment,
-              as: 'comments',
-              attributes: ['id', 'content', 'createdAt'],
+              model: db.User,
+              as: 'user',
               include: [
                 {
-                  model: db.User,
-                  as: 'user',
-                  include: [
-                    {
-                      model: db.Account,
-                      as: 'account',
-                      attributes: { exclude: ['password', 'user_id', 'id'] }
-                    }
-                  ]
+                  model: db.Account,
+                  as: 'account',
+                  attributes: { exclude: ['password', 'user_id', 'id'] }
                 }
               ]
             }
