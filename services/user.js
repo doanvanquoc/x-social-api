@@ -30,7 +30,7 @@ const getUserFollower = (id) => new Promise(async (resolve, reject) => {
       include: [
         {
           model: db.User,
-          as: 'follower',
+          as: 'user',
           include: [
             {
               model: db.Account,
