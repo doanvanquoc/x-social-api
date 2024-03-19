@@ -23,6 +23,31 @@ const getUser = (id) => new Promise(async (resolve, reject) => {
   }
 })
 
+const getUserFollower = (id) => new Promise(async (resolve, reject) => {
+  try {
+    const followers = await db.Follow.findAll({
+      where: { following_id: id },
+      include: [
+        {
+          model: db.User,
+          as: 'follower',
+          include: [
+            {
+              model: db.Account,
+              as: 'account',
+              attributes: { exclude: ['password', 'user_id', 'id'] }
+            }
+          ]
+        }
+      ]
+    })
+    resolve({ success: true, data: followers })
+  } catch (error) {
+    reject({ success: false, message: error.message })
+  }
+})
+
 export default {
-  getUser
+  getUser,
+  getUserFollower
 }
