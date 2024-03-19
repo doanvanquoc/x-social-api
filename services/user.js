@@ -81,9 +81,19 @@ const followUser = (follower_id, following_id) => new Promise(async (resolve, re
   }
 })
 
+const unFollowUser = (follower_id, following_id) => new Promise(async (resolve, reject) => {
+  try {
+    const follow = await db.Follow.destroy({ where: { follower_id, following_id } })
+    resolve({ success: true, data: follow })
+  } catch (error) {
+    reject({ success: false, message: error.message })
+  }
+})
+
 export default {
   getUser,
   getUserFollower,
   followUser,
-  getUserFollowing
+  getUserFollowing,
+  unFollowUser
 }
