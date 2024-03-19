@@ -51,8 +51,51 @@ const getAllPosts = () => new Promise(async (resolve, reject) => {
 
 const getPostById = (id) => new Promise(async (resolve, reject) => {
   try {
-    const post = await db.Post.findOne({ where: { id } })
-    resolve({ success: true, data: post })
+    const post = await db.Post.findOne({
+      where: { id },
+      include: [
+        {
+          model: db.User,
+          as: 'user',
+          include: [
+            {
+              model: db.Account,
+              as: 'account',
+              attributes: { exclude: ['password', 'user_id', 'id'] }
+            }
+          ]
+        },
+        {
+          model: db.Comment,
+          as: 'comments',
+          attributes: ['id', 'content', 'createdAt'],
+          include: [
+            {
+              model: db.User,
+              as: 'user',
+              include: [
+                {
+                  model: db.Account,
+                  as: 'account',
+                  attributes: { exclude: ['password', 'user_id', 'id'] }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          model: db.Image,
+          as: 'images',
+          attributes: ['id', 'path']
+        }
+      ],
+    })
+    if (!post) {
+      resolve({ success: false, message: 'Post not found' })
+    }
+    else {
+      resolve({ success: true, data: post })
+    }
   } catch (error) {
     reject({ success: false, message: error.message })
   }
@@ -99,8 +142,56 @@ const createPost = (body, files) => new Promise(async (resolve, reject) => {
   }
 })
 
+const getUserPosts = (userId) => new Promise(async (resolve, reject) => {
+  try {
+    const posts = await db.Post.findAll({
+      where: { user_id: userId },
+      include: [
+        {
+          model: db.User,
+          as: 'user',
+          include: [
+            {
+              model: db.Account,
+              as: 'account',
+              attributes: { exclude: ['password', 'user_id', 'id'] }
+            }
+          ]
+        },
+        {
+          model: db.Comment,
+          as: 'comments',
+          attributes: ['id', 'content', 'createdAt'],
+          include: [
+            {
+              model: db.User,
+              as: 'user',
+              include: [
+                {
+                  model: db.Account,
+                  as: 'account',
+                  attributes: { exclude: ['password', 'user_id', 'id'] }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          model: db.Image,
+          as: 'images',
+          attributes: ['id', 'path']
+        }
+      ],
+    })
+    resolve({ success: true, data: posts })
+  } catch (error) {
+    reject('{ success: false, message: error.message }')
+  }
+})
+
 export default {
   getAllPosts,
   getPostById,
-  createPost
+  createPost,
+  getUserPosts
 }

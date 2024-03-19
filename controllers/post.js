@@ -28,8 +28,18 @@ const createPost = async (req, res) => {
   }
 }
 
+const getUserPosts = async (req, res) => {
+  try {
+    const posts = await postService.getUserPosts(req.user.data.id);
+    res.json(posts);
+  } catch (error) {
+    res.json(error);
+  }
+}
+
 export default {
   getAllPosts,
   getPostById,
-  createPost
+  createPost,
+  getUserPosts
 }
