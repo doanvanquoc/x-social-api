@@ -47,7 +47,18 @@ const getUserFollower = (id) => new Promise(async (resolve, reject) => {
   }
 })
 
+const followUser = (follower_id, following_id) => new Promise(async (resolve, reject) => {
+  try {
+    console.log(follower_id, following_id);
+    const follow = await db.Follow.create({ follower_id, following_id })
+    resolve({ success: true, data: follow })
+  } catch (error) {
+    reject({ success: false, message: error.message })
+  }
+})
+
 export default {
   getUser,
-  getUserFollower
+  getUserFollower,
+  followUser
 }

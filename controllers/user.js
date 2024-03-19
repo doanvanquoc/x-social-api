@@ -20,7 +20,18 @@ const getUserFollower = async (req, res) => {
   }
 }
 
+const followUser = async (req, res) => {
+  try {
+    const { following_id } = req.body;
+    const follow = await userService.followUser(req.user.data.id, following_id);
+    res.json(follow);
+  } catch (error) {
+    res.json(error);
+  }
+}
+
 export default {
   getUser,
-  getUserFollower
+  getUserFollower,
+  followUser
 }
