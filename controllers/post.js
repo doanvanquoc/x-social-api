@@ -30,7 +30,7 @@ const createPost = async (req, res) => {
 
 const getUserPosts = async (req, res) => {
   try {
-    const posts = await postService.getUserPosts(req.user.data.id);
+    const posts = await postService.getUserPosts(req.params.id);
     res.json(posts);
   } catch (error) {
     res.json(error);
