@@ -4,6 +4,7 @@ import verifyToken from "../middleware/verify_token.js";
 const router = express.Router();
 
 router.post("/follow", verifyToken, userController.followUser);
+router.get("/:id/following", verifyToken, userController.getUserFollowing);
 router.get("/:id", verifyToken, userController.getUser);
 router.get("/:id/follower", verifyToken, userController.getUserFollower);
 

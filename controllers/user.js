@@ -30,8 +30,19 @@ const followUser = async (req, res) => {
   }
 }
 
+const getUserFollowing = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const followings = await userService.getUserFollowing(id);
+    res.json(followings);
+  } catch (error) {
+    res.json(error);
+  }
+}
+
 export default {
   getUser,
   getUserFollower,
-  followUser
+  followUser,
+  getUserFollowing
 }

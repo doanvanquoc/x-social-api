@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
       });
       Follow.belongsTo(models.User, {
         foreignKey: 'following_id',
-        as: 'followed'
+        as: 'following'
       });
     }
   }

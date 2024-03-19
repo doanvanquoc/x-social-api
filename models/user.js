@@ -25,11 +25,11 @@ module.exports = (sequelize, DataTypes) => {
       });
       User.hasMany(models.Follow, {
         foreignKey: 'follower_id',
-        as: 'followers'
+        as: 'follower'
       });
       User.hasMany(models.Follow, {
         foreignKey: 'following_id',
-        as: 'followeds'
+        as: 'following'
       });
     }
   }

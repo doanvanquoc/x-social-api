@@ -30,7 +30,7 @@ const getUserFollower = (id) => new Promise(async (resolve, reject) => {
       include: [
         {
           model: db.User,
-          as: 'user',
+          as: 'follower',
           include: [
             {
               model: db.Account,
@@ -42,6 +42,30 @@ const getUserFollower = (id) => new Promise(async (resolve, reject) => {
       ]
     })
     resolve({ success: true, data: followers })
+  } catch (error) {
+    reject({ success: false, message: error.message })
+  }
+})
+
+const getUserFollowing = (id) => new Promise(async (resolve, reject) => {
+  try {
+    const followings = await db.Follow.findAll({
+      where: { follower_id: id },
+      include: [
+        {
+          model: db.User,
+          as: 'following',
+          include: [
+            {
+              model: db.Account,
+              as: 'account',
+              attributes: { exclude: ['password', 'user_id', 'id'] }
+            }
+          ]
+        }
+      ]
+    })
+    resolve({ success: true, data: followings })
   } catch (error) {
     reject({ success: false, message: error.message })
   }
@@ -60,5 +84,6 @@ const followUser = (follower_id, following_id) => new Promise(async (resolve, re
 export default {
   getUser,
   getUserFollower,
-  followUser
+  followUser,
+  getUserFollowing
 }
