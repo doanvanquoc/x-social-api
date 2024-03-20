@@ -34,7 +34,10 @@ io.on('connection', (socket) => {
         console.log('user disconnected');
     });
     socket.on('send_message', (data) => {
-        const room = data.sender.id.join(data.receiver.id).sort();
+        //create room from sender['id'] and receiver['id'] and sort it
+        let room = [data['sender']['id'], data['receiver'['id']]].sort().join('_');
+
+
         socket.join(room);
         io.to(room).emit('sendMessage', data);
         console.log(room);
