@@ -4,17 +4,17 @@ const io = require('../index');
 //create a new chat room between two users, using socket.io to emit chat message
 const newChat = (sender_id, receiver_id, content) => new Promise((resolve, reject) => {
   //emit chat message to receiver and sender
-  io.on('connection', (socket) => {
-    socket.on('chat message', (msg) => {
-      io.emit('chat message', msg);
-    });
-  });
+  // io.on('connection', (socket) => {
+  //   socket.on('chat message', (msg) => {
+  //     io.emit('chat message', msg);
+  //   });
+  // });
   db.Chat.create({
     sender_id,
     receiver_id,
-    content
-  }).then(chat => {
-    resolve({ success: true, chat });
+    message: content
+  }).then(message => {
+    resolve({ success: true, message });
   }).catch(err => {
     reject({ success: false, message: err.message });
   });
