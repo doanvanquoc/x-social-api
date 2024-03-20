@@ -22,9 +22,18 @@ const newChat = (sender_id, receiver_id, content) => new Promise((resolve, rejec
 
 const getAllMessages = (sender_id, receiver_id) => new Promise((resolve, reject) => {
   db.Chat.findAll({
+    //where sender_id = sender_id and receiver_id = receiver_id or sender_id = receiver_id and receiver_id = sender_id
     where: {
-      sender_id,
-      receiver_id
+      [db.Sequelize.Op.or]: [
+        {
+          sender_id,
+          receiver_id
+        },
+        {
+          sender_id: receiver_id,
+          receiver_id: sender_id
+        }
+      ]
     },
     attributes: {exclude: ['sender_id', 'receiver_id']},
     include: [
