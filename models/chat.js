@@ -33,7 +33,8 @@ module.exports = (sequelize, DataTypes) => {
     createdAt: {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW
-    }
+    },
+    image: DataTypes.STRING
   }, {
     timestamps: false,
     sequelize,

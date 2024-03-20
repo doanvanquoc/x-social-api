@@ -2,11 +2,12 @@ const db = require('../models');
 const io = require('../index');
 
 //create a new chat room between two users, using socket.io to emit chat message
-const newChat = (sender_id, receiver_id, content) => new Promise((resolve, reject) => {
+const newChat = (sender_id, receiver_id, content, image) => new Promise((resolve, reject) => {
   db.Chat.create({
     sender_id,
     receiver_id,
-    message: content
+    message: content,
+    image
   }).then(message => {
     db.Chat.findOne({
       where: {
