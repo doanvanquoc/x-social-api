@@ -34,7 +34,7 @@ io.on('connection', (socket) => {
         console.log('user disconnected');
     });
     socket.on('send_message', (data) => {
-        socket.broadcast.emit('sendMessage', data);
+        io.emit('sendMessage', data);
     }
     );
 }
