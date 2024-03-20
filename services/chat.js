@@ -12,7 +12,7 @@ const newChat = (sender_id, receiver_id, content) => new Promise((resolve, rejec
       where: {
         id: message.id
       },
-      attributes: {exclude: ['sender_id', 'receiver_id']},
+      attributes: { exclude: ['sender_id', 'receiver_id'] },
       include: [
         {
           model: db.User,
@@ -21,7 +21,7 @@ const newChat = (sender_id, receiver_id, content) => new Promise((resolve, rejec
             {
               model: db.Account,
               as: 'account',
-              attributes: {exclude: ['password', 'user_id', 'id']}
+              attributes: { exclude: ['password', 'user_id', 'id'] }
             }
           ]
         },
@@ -32,7 +32,7 @@ const newChat = (sender_id, receiver_id, content) => new Promise((resolve, rejec
             {
               model: db.Account,
               as: 'account',
-              attributes: {exclude: ['password', 'user_id', 'id']}
+              attributes: { exclude: ['password', 'user_id', 'id'] }
             }
           ]
         }
@@ -62,7 +62,7 @@ const getAllMessages = (sender_id, receiver_id) => new Promise((resolve, reject)
         }
       ]
     },
-    attributes: {exclude: ['sender_id', 'receiver_id']},
+    attributes: { exclude: ['sender_id', 'receiver_id'] },
     include: [
       {
         model: db.User,
@@ -71,7 +71,7 @@ const getAllMessages = (sender_id, receiver_id) => new Promise((resolve, reject)
           {
             model: db.Account,
             as: 'account',
-            attributes: {exclude: ['password', 'user_id', 'id']}
+            attributes: { exclude: ['password', 'user_id', 'id'] }
           }
         ]
       },
@@ -82,11 +82,11 @@ const getAllMessages = (sender_id, receiver_id) => new Promise((resolve, reject)
           {
             model: db.Account,
             as: 'account',
-            attributes: {exclude: ['password', 'user_id', 'id']}
+            attributes: { exclude: ['password', 'user_id', 'id'] }
           }
         ]
       }
-    
+
     ]
   }).then(messages => {
     resolve({ success: true, messages });
@@ -95,7 +95,57 @@ const getAllMessages = (sender_id, receiver_id) => new Promise((resolve, reject)
   });
 });
 
+const getUserChatRoom = (userId) => new Promise(async (resolve, reject) => {
+  try {
+    // Thực hiện truy vấn để lấy danh sách tất cả các người dùng mà người dùng có ID là userId đã trò chuyện với
+    const users = await db.User.findAll({
+      include: [
+        {
+          model: db.Chat,
+          as: 'sender',
+          where: {
+            [db.Sequelize.Op.or]: [
+              { sender_id: userId },
+              { receiver_id: userId }
+            ]
+          },
+          attributes: []
+        },
+        {
+          model: db.Account,
+          as: 'account',
+          attributes: { exclude: ['password', 'user_id', 'id'] }
+        }
+      ],
+      where: {
+        id: {
+          [db.Sequelize.Op.ne]: userId // Loại bỏ người dùng đang đăng nhập khỏi kết quả trả về
+        }
+      },
+      group: ['User.id', 'account.email'],
+      raw: true
+    });
+
+    const formattedUsers = users.map(user => ({
+      id: user.id,
+      username: user.username,
+      display_name: user.display_name,
+      avatar: user.avatar,
+      bio: user.bio,
+      account: {
+        email: user['account.email']
+      }
+    }));
+
+    resolve({ success: true, users: formattedUsers });
+  } catch (error) {
+    reject({ success: false, message: error.message });
+  }
+});
+
+
 export default {
   newChat,
-  getAllMessages
+  getAllMessages,
+  getUserChatRoom
 }

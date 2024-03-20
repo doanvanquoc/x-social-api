@@ -21,7 +21,17 @@ const getAllMessages = async (req, res) => {
     }
 }
 
+const getUserChatRoom = async (req, res) => {
+    try {
+        const chats = await chatService.getUserChatRoom(req.user.data.id);
+        res.json(chats);
+    } catch (error) {
+        res.json(error);
+    }
+}
+
 export default {
     newChat,
-    getAllMessages
+    getAllMessages,
+  getUserChatRoom
 }
