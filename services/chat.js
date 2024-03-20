@@ -14,7 +14,40 @@ const newChat = (sender_id, receiver_id, content) => new Promise((resolve, rejec
     receiver_id,
     message: content
   }).then(message => {
-    resolve({ success: true, message });
+    db.Chat.findOne({
+      where: {
+        id: message.id
+      },
+      attributes: {exclude: ['sender_id', 'receiver_id']},
+      include: [
+        {
+          model: db.User,
+          as: 'sender',
+          include: [
+            {
+              model: db.Account,
+              as: 'account',
+              attributes: {exclude: ['password', 'user_id', 'id']}
+            }
+          ]
+        },
+        {
+          model: db.User,
+          as: 'receiver',
+          include: [
+            {
+              model: db.Account,
+              as: 'account',
+              attributes: {exclude: ['password', 'user_id', 'id']}
+            }
+          ]
+        }
+      ]
+    }).then(message => {
+      resolve({ success: true, message });
+    }).catch(err => {
+      reject({ success: false, message: err.message });
+    });
   }).catch(err => {
     reject({ success: false, message: err.message });
   });
