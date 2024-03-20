@@ -3,7 +3,7 @@ const cloudinary = require('cloudinary').v2;
 const newChat = async (req, res) => {
     const receiver_id = req.body.receiver_id;
     const content = req.body.content;
-    const image = req.file ? req.file.path : req.body.content;
+    const image = req.file;
     console.log(content);
     try {
         const chat = await chatService.newChat(req.user.data.id, receiver_id, content, image);
