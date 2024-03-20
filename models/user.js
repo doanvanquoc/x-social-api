@@ -31,6 +31,14 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'following_id',
         as: 'following'
       });
+      User.hasMany(models.Chat, {
+        foreignKey: 'sender_id',
+        as: 'sender'
+      });
+      User.hasMany(models.Chat, {
+        foreignKey: 'receiver_id',
+        as: 'receiver'
+      });
     }
   }
   User.init({
