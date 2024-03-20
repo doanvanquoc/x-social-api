@@ -19,6 +19,7 @@ import userRouter from './routers/user.js';
 import postRouter from './routers/post.js';
 import commentRouter from './routers/comment.js';
 import chatRouter from './routers/chat.js';
+import { log } from 'console';
 
 app.use('/auth', authRouter);
 app.use('/user', userRouter);
@@ -26,6 +27,21 @@ app.use('/posts', postRouter);
 app.use('/comments', commentRouter);
 app.use('/chat', chatRouter);
 
+
+io.on('connection', (socket) => {
+    console.log('a user connected');
+    socket.on('disconnect', () => {
+        console.log('user disconnected');
+    });
+    socket.on('send_message', (data) => {
+        const room = data.sender.id.join(data.receiver.id).sort();
+        socket.join(room);
+        io.to(room).emit('sendMessage', data);
+        console.log(room);
+    }
+    );
+}
+);
 
 export default io
 
