@@ -40,8 +40,8 @@ io.on('connection', (socket) => {
     socket.on('send_message', (data) => {
         console.log('sender socket id', data.sender.socketid);
         console.log('receiver socket id', data.receiver.socketid);
-        io.to(data.sender.socketid).emit('receive_message', data);
-        io.to(data.receiver.socketid).emit('receive_message', data);
+        io.to(data.sender.socketid).emit('sendMessage', data);
+        io.to(data.receiver.socketid).emit('sendMessage', data);
     }
     );
 }
