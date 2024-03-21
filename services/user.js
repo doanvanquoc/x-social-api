@@ -90,7 +90,7 @@ const unFollowUser = (follower_id, following_id) => new Promise(async (resolve, 
   }
 })
 
-const updateSocketId = (id, socket_id) => new Promise(async (resolve, reject) => {
+const updateSocketId = (id, socketid) => new Promise(async (resolve, reject) => {
   try {
     const user = await db.User.update({ socketid }, { where: { id } })
     resolve({ success: true, data: user })
