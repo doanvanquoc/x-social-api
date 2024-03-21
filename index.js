@@ -34,8 +34,8 @@ io.on('connection', (socket) => {
         console.log('user disconnected');
     });
     socket.on('login', (data) => {
-        userController.updateSocketId(data.id, socket.id);
-        console.log('login', data.id, socket.id);
+        userController.updateSocketId(data, socket.id);
+        console.log('login', data, socket.id);
     });
     socket.on('send_message', (data) => {
         io.emit('sendMessage', data);
