@@ -3,7 +3,7 @@ import http from 'http'; // Import thư viện http để tạo server HTTP
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { Server } from 'socket.io'; // Import Server từ thư viện socket.io
-import { updateSocketId } from './services/user.js';
+import userService from './services/user.js';
 dotenv.config();
 
 const app = express();
@@ -19,7 +19,6 @@ import userRouter from './routers/user.js';
 import postRouter from './routers/post.js';
 import commentRouter from './routers/comment.js';
 import chatRouter from './routers/chat.js';
-import { log } from 'console';
 
 app.use('/auth', authRouter);
 app.use('/user', userRouter);
@@ -34,7 +33,7 @@ io.on('connection', (socket) => {
         console.log('user disconnected');
     });
     socket.on('login', (data) => {
-        updateSocketId(data.id, socket.id);
+        userService.updateSocketId(data.id, socket.id);
     });
     socket.on('send_message', (data) => {
         io.emit('sendMessage', data);
