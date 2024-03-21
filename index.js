@@ -38,7 +38,8 @@ io.on('connection', (socket) => {
         console.log('login', data, socket.id);
     });
     socket.on('send_message', (data) => {
-        io.emit('sendMessage', data);
+        io.to(data.sender.socketid).emit('receive_message', data);
+        io.to(data.receiver.socketid).emit('receive_message', data);
     }
     );
 }
