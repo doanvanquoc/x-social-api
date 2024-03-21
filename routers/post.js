@@ -8,4 +8,5 @@ router.get('/', verifyToken, postController.getAllPosts)
 router.get('/user/:id', verifyToken, postController.getUserPosts)
 router.get('/:id', verifyToken, postController.getPostById)
 router.post('/', verifyToken, cloud.uploadPost.any('images'), postController.createPost)
+router.post('/like/:id', verifyToken, postController.likePost)
 export default router

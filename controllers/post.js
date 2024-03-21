@@ -37,9 +37,19 @@ const getUserPosts = async (req, res) => {
   }
 }
 
+const likePost = async (req, res) => {
+  try {
+    const post = await postService.likePost(req.user.data.id, req.params.id);
+    res.json(post);
+  } catch (error) {
+    res.json(error);
+  }
+}
+
 export default {
   getAllPosts,
   getPostById,
   createPost,
-  getUserPosts
+  getUserPosts,
+  likePost
 }

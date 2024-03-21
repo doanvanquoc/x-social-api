@@ -189,10 +189,27 @@ const getUserPosts = (userId) => new Promise(async (resolve, reject) => {
   }
 })
 
+const likePost = (userId, postId) => new Promise(async (resolve, reject) => {
+  try {
+    const like = await db.Like.findOne({ where: { user_id: userId, post_id: postId } })
+    if (like) {
+      await like.destroy()
+      resolve({ success: true, message: 'Unlike post successfully' })
+    }
+    else {
+      await db.Like.create({ user_id: userId, post_id: postId })
+      resolve({ success: true, message: 'Like post successfully' })
+    }
+  } catch (error) {
+    reject({ success: false, message: error.message })
+  }
+})
+
 
 export default {
   getAllPosts,
   getPostById,
   createPost,
-  getUserPosts
+  getUserPosts,
+  likePost
 }
