@@ -189,6 +189,7 @@ const getUserPosts = (userId) => new Promise(async (resolve, reject) => {
   }
 })
 
+
 export default {
   getAllPosts,
   getPostById,

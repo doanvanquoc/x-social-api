@@ -50,10 +50,20 @@ const unFollowUser = async (req, res) => {
   }
 }
 
+const updateSocketId = async (id, socketid) => {
+  try {
+    const user = await userService.updateSocketId(id, socketid);
+    res.json(user);
+  } catch (error) {
+    res.json(error);
+  }
+}
+
 export default {
   getUser,
   getUserFollower,
   followUser,
   getUserFollowing,
-  unFollowUser
+  unFollowUser,
+  updateSocketId
 }
