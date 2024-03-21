@@ -58,7 +58,8 @@ module.exports = (sequelize, DataTypes) => {
     display_name: DataTypes.STRING,
     avatar: DataTypes.STRING,
     bio: DataTypes.TEXT,
-    socketid: DataTypes.STRING
+    socketid: DataTypes.STRING,
+    fcmToken: DataTypes.STRING,
   }, {
     timestamps: false,
     sequelize,

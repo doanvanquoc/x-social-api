@@ -50,9 +50,9 @@ const unFollowUser = async (req, res) => {
   }
 }
 
-const updateSocketId = async (id, socketid) => {
+const updateToken = async (id, socketid, fcmToken) => {
   try {
-    const user = await userService.updateSocketId(id, socketid);
+    const user = await userService.updateToken(id, socketid, fcmToken);
     return user
   } catch (error) {
    console.log(error);
@@ -65,5 +65,5 @@ export default {
   followUser,
   getUserFollowing,
   unFollowUser,
-  updateSocketId
+  updateSocketId: updateToken
 }

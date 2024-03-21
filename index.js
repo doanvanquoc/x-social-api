@@ -6,6 +6,12 @@ import { Server } from 'socket.io'; // Import Server từ thư viện socket.io
 // import userService from './services/user.js';
 import userController from './controllers/user.js';
 dotenv.config();
+import admin from 'firebase-admin';
+import serviceAccount from './config/firebase-admin.json';
+
+admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount)
+});
 
 const app = express();
 const server = http.createServer(app); // Tạo server HTTP từ ứng dụng Express
@@ -34,8 +40,8 @@ io.on('connection', (socket) => {
         console.log('user disconnected');
     });
     socket.on('login', (data) => {
-        userController.updateSocketId(data, socket.id);
-        console.log('login', data, socket.id);
+        userController.updateSocketId(data.userId, socket.id, data.fcmToken);
+        console.log('login', data, socket.id, data.fcmToken);
     });
     socket.on('send_message', (data) => {
         console.log('sender socket id', data.sender.socketid);
@@ -44,6 +50,24 @@ io.on('connection', (socket) => {
         io.to(data.receiver.socketid).emit('sendMessage', data);
     }
     );
+
+    socket.on('like_post', (data) => {
+        console.log('like_post', data);
+       const message = {
+            notification: {
+                title: 'New Like',
+                body: `${data.username} liked your post`
+            },
+            token: data.token
+        }
+        admin.messaging().send(message)
+            .then((response) => {
+                console.log('Successfully sent message:', response);
+            })
+            .catch((error) => {
+                console.log('Error sending message:', error);
+            });
+    })
 }
 );
 
