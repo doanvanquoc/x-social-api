@@ -55,8 +55,8 @@ io.on('connection', (socket) => {
         console.log('like_post', data);
        const message = {
             notification: {
-                title: 'New Like',
-                body: `${data.username} liked your post`
+                title: 'Notification',
+                body: `${data.username} ${data.action} your post`
             },
             token: data.token
         }
