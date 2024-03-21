@@ -9,7 +9,6 @@ const getAllPosts = () => new Promise(async (resolve, reject) => {
         {
           model: db.User,
           as: 'user',
-          attributes: ['id', 'username', 'display_name', 'avatar', 'bio'],
           include: [
             {
               model: db.Account,
@@ -125,7 +124,6 @@ const createPost = (body, files) => new Promise(async (resolve, reject) => {
         {
           model: db.User,
           as: 'user',
-          attributes: ['id', 'username', 'display_name', 'avatar', 'bio'],
           include: [
             {
               model: db.Account,
