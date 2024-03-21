@@ -88,6 +88,11 @@ const getPostById = (id) => new Promise(async (resolve, reject) => {
             }
           ]
         },
+        //include count total likes
+        {
+          model: db.Like,
+          as: 'likes',
+        },
         {
           model: db.Image,
           as: 'images',
@@ -128,6 +133,10 @@ const createPost = (body, files) => new Promise(async (resolve, reject) => {
               attributes: { exclude: ['password', 'user_id', 'id'] }
             }
           ]
+        },
+        {
+          model: db.Like,
+          as: 'likes',
         },
         {
           model: db.Image,
@@ -180,6 +189,12 @@ const getUserPosts = (userId) => new Promise(async (resolve, reject) => {
               ]
             }
           ]
+        },
+
+        //include count total likes
+        {
+          model: db.Like,
+          as: 'likes',
         },
         {
           model: db.Image,
