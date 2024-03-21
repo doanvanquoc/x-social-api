@@ -36,6 +36,11 @@ const getAllPosts = () => new Promise(async (resolve, reject) => {
             }
           ]
         },
+        //include count total likes
+        {
+          model: db.Like,
+          as: 'likes',
+        },
         {
           model: db.Image,
           as: 'images',
