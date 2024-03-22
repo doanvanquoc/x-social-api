@@ -30,6 +30,7 @@ module.exports = (sequelize, DataTypes) => {
     creator_id: DataTypes.INTEGER,
     name: DataTypes.STRING,
     description: DataTypes.TEXT,
+    poster: DataTypes.STRING,
   }, {
     timestamps: false,
     sequelize,
