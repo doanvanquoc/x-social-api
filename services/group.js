@@ -123,9 +123,91 @@ const createGroup = (body, userId, file) => new Promise(async (resolve, reject) 
   }
 })
 
+const createPostInGroup = (body, userId, groupId, files) => new Promise(async (resolve, reject) => {
+  try {
+    const post = await db.Post.create({ ...body, user_id: userId, group_id: groupId })
+    if (files) {
+      for (const file of files) {
+        await db.Image.create({ path: file.path, post_id: post.id })
+      }
+    }
+    const newPost = await db.Post.findOne({
+      where: { id: post.id },
+      include: [
+        {
+          model: db.User,
+          as: 'user',
+          include: [
+            {
+              model: db.Account,
+              as: 'account',
+              attributes: { exclude: ['password', 'user_id', 'id'] }
+            }
+          ]
+        },
+        {
+          model: db.Group,
+          as: 'group',
+        },
+        {
+          model: db.Like,
+          as: 'likes',
+        },
+        {
+          model: db.Image,
+          as: 'images',
+          attributes: ['id', 'path']
+        }
+      ],
+    })
+    resolve({ success: true, data: newPost })
+  } catch (error) {
+    reject({ success: false, message: error.message })
+  }
+})
+
+const getAllPostsInGroup = (groupId) => new Promise(async (resolve, reject) => {
+  try {
+    const posts = await db.Post.findAll({
+      where: { group_id: groupId },
+      include: [
+        {
+          model: db.User,
+          as: 'user',
+          include: [
+            {
+              model: db.Account,
+              as: 'account',
+              attributes: { exclude: ['password', 'user_id', 'id'] }
+            }
+          ]
+        },
+        {
+          model: db.Group,
+          as: 'group',
+        },
+        {
+          model: db.Like,
+          as: 'likes',
+        },
+        {
+          model: db.Image,
+          as: 'images',
+          attributes: ['id', 'path']
+        }
+      ],
+    })
+    resolve({ success: true, data: posts })
+  } catch (error) {
+    reject({ success: false, message: error.message })
+  }
+})
+
 export default {
   getAllGroups,
   joinGroup,
   getGroupById,
-  createGroup
+  createGroup,
+  createPostInGroup,
+  getAllPostsInGroup
 }

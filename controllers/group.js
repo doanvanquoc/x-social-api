@@ -39,9 +39,34 @@ const createGroup = async (req, res) => {
   }
 }
 
+const createPostInGroup = async (req, res) => {
+  try {
+    const post = await groupService.createPostInGroup(req.body, req.user.data.id, req.params.groupId, req.files);
+    res.json(post);
+  } catch (error) {
+    if (req.files) {
+      for (const file of req.files) {
+        cloudinary.uploader.destroy(file.filename)
+      }
+    }
+    res.json(error);
+  }
+}
+
+const getAllPostsInGroup = async (req, res) => {
+  try {
+    const posts = await groupService.getAllPostsInGroup(req.params.groupId);
+    res.json(posts);
+  } catch (error) {
+    res.json(error);
+  }
+}
+
 export default {
   getAllGroups,
   joinGroup,
   getGroupById,
-  createGroup
+  createGroup,
+  createPostInGroup,
+  getAllPostsInGroup
 }
