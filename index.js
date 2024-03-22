@@ -26,12 +26,14 @@ import userRouter from './routers/user.js';
 import postRouter from './routers/post.js';
 import commentRouter from './routers/comment.js';
 import chatRouter from './routers/chat.js';
+import groupRouter from './routers/group.js';
 
 app.use('/auth', authRouter);
 app.use('/user', userRouter);
 app.use('/posts', postRouter);
 app.use('/comments', commentRouter);
 app.use('/chat', chatRouter);
+app.use('/groups', groupRouter);
 
 
 io.on('connection', (socket) => {
