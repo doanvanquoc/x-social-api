@@ -36,8 +36,17 @@ const chatStorage = new CloudinaryStorage({
   }
 });
 
+const groupStorage = new CloudinaryStorage({
+  cloudinary,
+  allowedFormats: ['jpg', 'png'],
+  params: {
+    folder: 'group'
+  }
+});
+
 const uploadAvatar = multer({ storage: avatarStorage });
 const uploadPost = multer({ storage: postStorage });
 const uploadChat = multer({ storage: chatStorage });
+const uploadGroup = multer({ storage: groupStorage });
 
-export default {uploadAvatar, uploadPost, uploadChat };
+export default {uploadAvatar, uploadPost, uploadChat, uploadGroup };

@@ -46,10 +46,12 @@ const likePost = async (req, res) => {
   }
 }
 
+
+
 export default {
   getAllPosts,
   getPostById,
   createPost,
   getUserPosts,
-  likePost
+  likePost,
 }

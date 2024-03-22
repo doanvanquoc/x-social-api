@@ -1,5 +1,5 @@
 import groupService from '../services/group';
-
+const cloudinary = require('cloudinary').v2;
 const getAllGroups = async (req, res) => {
   try {
     const result = await groupService.getAllGroups();
@@ -27,8 +27,21 @@ const getGroupById = async (req, res) => {
   }
 }
 
+const createGroup = async (req, res) => {
+  try {
+    const group = await groupService.createGroup(req.body, req.user.data.id, req.file);
+    res.json(group);
+  } catch (error) {
+    if (req.file) {
+      cloudinary.uploader.destroy(req.file.filename);
+    }
+    res.json(error);
+  }
+}
+
 export default {
   getAllGroups,
   joinGroup,
-  getGroupById
+  getGroupById,
+  createGroup
 }

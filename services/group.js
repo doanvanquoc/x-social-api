@@ -111,8 +111,21 @@ const getGroupById = (groupId) => new Promise(async (resolve, reject) => {
   }
 })
 
+const createGroup = (body, userId, file) => new Promise(async (resolve, reject) => {
+  try {
+    const { name, description } = body
+    const group = await db.Group.create({ name, description, poster: file.path, creator_id: userId })
+    //create membership for creator
+    await db.Membership.create({ group_id: group.id, user_id: userId })
+    resolve({ success: true, data: group })
+  } catch (error) {
+    reject({ success: false, message: error.message })
+  }
+})
+
 export default {
   getAllGroups,
   joinGroup,
-  getGroupById
+  getGroupById,
+  createGroup
 }
