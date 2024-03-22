@@ -11,7 +11,7 @@ const getAllGroups = async (req, res) => {
 
 const joinGroup = async (req, res) => {
   try {
-    const result = await groupService.joinGroup(req.user.data.id, req.body.group_id);
+    const result = await groupService.joinGroup(req.body.group_id, req.user.data.id);
     res.json(result)
   } catch (error) {
     res.json(error);
