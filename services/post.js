@@ -5,6 +5,9 @@ const db = require('../models')
 const getAllPosts = () => new Promise(async (resolve, reject) => {
   try {
     const posts = await db.Post.findAll({
+      where: {
+        visibility: 'public'
+      },
       include: [
         {
           model: db.User,
@@ -56,7 +59,7 @@ const getAllPosts = () => new Promise(async (resolve, reject) => {
 const getPostById = (id) => new Promise(async (resolve, reject) => {
   try {
     const post = await db.Post.findOne({
-      where: { id },
+      where: { id},
       include: [
         {
           model: db.User,
@@ -222,6 +225,8 @@ const likePost = (userId, postId) => new Promise(async (resolve, reject) => {
     reject({ success: false, message: error.message })
   }
 })
+
+
 
 
 export default {

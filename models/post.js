@@ -27,6 +27,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'post_id',
         as: 'likes'
       });
+      Post.belongsTo(models.Group, {
+        foreignKey: 'group_id',
+        as: 'group'
+      });
     }
   }
   Post.init({
@@ -40,7 +44,12 @@ module.exports = (sequelize, DataTypes) => {
     timeline: {
       type: DataTypes.DATE,
       defaultValue: false,
-    }
+    },
+    visibility: {
+      type: DataTypes.ENUM('public', 'group'),
+      defaultValue: 'public'
+    },
+    group_id: DataTypes.INTEGER
   }, {
     timestamps: false,
     sequelize,
