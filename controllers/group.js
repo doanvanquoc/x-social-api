@@ -9,6 +9,26 @@ const getAllGroups = async (req, res) => {
   }
 }
 
+const joinGroup = async (req, res) => {
+  try {
+    const result = await groupService.joinGroup(req.user.data.id, req.body.group_id);
+    res.json(result)
+  } catch (error) {
+    res.json(error);
+  }
+}
+
+const getGroupById = async (req, res) => {
+  try {
+    const result = await groupService.getGroupById(req.params.groupId);
+    res.json(result)
+  } catch (error) {
+    res.json(error);
+  }
+}
+
 export default {
-  getAllGroups
+  getAllGroups,
+  joinGroup,
+  getGroupById
 }
